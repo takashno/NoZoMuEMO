@@ -7,24 +7,24 @@ highlighter: rouge
 markdown: kramdown
 disqus: https-traningmanagementsystem-github-io-devlog
 google_analytics: UA-63047134-5
-title: 意識高い系SEの箱庭
+title: NoZoMuEMO
 
 defaults:
   -
     scope:
       path: "" # empty string for all files
     values:
-      title: Traning Management System - Devlog
+      title: NoZoMuEMO
 
-description: Traning Management System. Development Blog
+description: takashno memo and blog
 author:
-  name: TraningManagementSystem
+  name: NoZoMuEMO
   email:
-  github: TraningManagementSystem
-  twitter:
+  github: takashno
+  twitter: n_zomu
   pinterest:
   linkedin:
-  bio: Traning Management System. Development Blog
+  bio: NoZoMuEMO
   email_md5:
 
 rss_path: feed.xml
@@ -35,11 +35,12 @@ members_path: members.html
 # set it as url of an image
 # sidebar_background_image: https://www.dropbox.com/s/g9h23zrycedxtk5/sky.png?raw=1
 
-BASE_PATH: //traningmanagementsystem.github.io/devlog
+BASE_PATH:
 
 gems:
   - jekyll-paginate
   - jekyll-seo-tag
+  - jekyll-asciidoc
 
 kramdown:
   auto_ids:       true

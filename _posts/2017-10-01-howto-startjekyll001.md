@@ -8,7 +8,7 @@ fullview: false
 comments: true
 ---
 {% assign author = site.data.people[page.author] %}
-こんばんは、{{ author.github }}です。\\
+こんばんは、{{ author.name }}です。\\
 \\
 このブログ自体は[Jekyll](https://jekyllrb-ja.github.io/)というもので構築されています。\\
 記事自体はMarkdownで書かれておりシンタックスハイライトももちろん対応しています。\\

@@ -8,7 +8,8 @@ fullview: false
 comments: true
 ---
 
-こんばんは、alp-takashnoです。\\
+{% assign author = site.data.people[page.author] %}
+こんばんは、{{ author.name }}です。\\
 開発ブログを設けましたのでそもそもの利用方法を軽く説明したいと思います。
 
 ### 前提

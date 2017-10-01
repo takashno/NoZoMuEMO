@@ -8,7 +8,7 @@ fullview: false
 comments: true
 ---
 {% assign author = site.data.people[page.author] %}
-こんばんは、{{ author.github }}です。\\
+こんばんは、{{ author.name }}です。\\
 少しきちんとJekyllのブログの書き方を紹介したいと思います。
 
 <!-- 目次 -->
