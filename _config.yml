@@ -1,0 +1,51 @@
+# visit https://github.com/mojombo/jekyll/wiki/Configuration for more settings
+
+paginate: 10 # pagination based on number of posts
+paginate_path: "page:num"
+exclude: ["README.md"] # files to exclude
+highlighter: rouge
+markdown: kramdown
+disqus: https-traningmanagementsystem-github-io-devlog
+google_analytics: UA-63047134-5
+title: 意識高い系SEの箱庭
+
+defaults:
+  -
+    scope:
+      path: "" # empty string for all files
+    values:
+      title: Traning Management System - Devlog
+
+description: Traning Management System. Development Blog
+author:
+  name: TraningManagementSystem
+  email:
+  github: TraningManagementSystem
+  twitter:
+  pinterest:
+  linkedin:
+  bio: Traning Management System. Development Blog
+  email_md5:
+
+rss_path: feed.xml
+categories_path: categories.html
+tags_path: tags.html
+members_path: members.html
+
+# set it as url of an image
+# sidebar_background_image: https://www.dropbox.com/s/g9h23zrycedxtk5/sky.png?raw=1
+
+BASE_PATH: //traningmanagementsystem.github.io/devlog
+
+gems:
+  - jekyll-paginate
+  - jekyll-seo-tag
+
+kramdown:
+  auto_ids:       true
+  entity_output:  as_char
+  toc_levels:     1..6
+  smart_quotes:   lsquo,rsquo,ldquo,rdquo
+  input:          GFM
+  hard_wrap:      false
+  footnote_nr:    1
