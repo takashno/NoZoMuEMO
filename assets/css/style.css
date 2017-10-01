@@ -217,3 +217,27 @@ border-color: white;
 {
 	color: white;
 }
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 1px solid gray;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+th {
+    background:#2A7998;
+    color: white;
+    padding: 10px;
+    border: 1px solid gray;
+}
+
+tr {
+    border: 1px solid gray;
+}
+
+td {
+    border: 1px solid gray;
+    padding: 5px;
+}
