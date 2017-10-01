@@ -5,7 +5,7 @@ paginate_path: "page:num"
 exclude: ["README.md"] # files to exclude
 highlighter: rouge
 markdown: kramdown
-disqus: https-traningmanagementsystem-github-io-devlog
+disqus: nozomuemo
 google_analytics: UA-63047134-5
 title: NoZoMuEMO
 
