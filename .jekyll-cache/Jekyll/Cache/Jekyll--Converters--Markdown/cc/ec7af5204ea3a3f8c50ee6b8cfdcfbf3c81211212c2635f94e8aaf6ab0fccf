@@ -1,0 +1,9 @@
+I"v
+<p>takashno（Private Ver）です。<br />
+SpringBootを利用してREST-APIを作成していますが、<br />
+リソースのバージョニングをどうやるべきなのかに迷い出しています。<br />
+<br />
+調べて結果としては、ETag/If-Match/If-None-Matchによる制御が一番しっくりきそうです。</p>
+
+<p>// 書きかけ。。。</p>
+:ET

@@ -1,0 +1,93 @@
+I"g<p>SpringBootのDevtoolsを利用していい感じで開発効率上げたい！と考えていますが、<br />
+なかなかうまく機能せず、困ったためメモエントリーになります。<br />
+以下からは全て、SpringBootとDevtoolsをIntelliJ IDEAで利用してThymeleafのテンプレートを
+キャッシュさせることなく変更をリアルタイムに見る設定方法を記載します。</p>
+
+<!-- 目次 -->
+<hr />
+
+<ul id="markdown-toc">
+  <li><a href="#設定内容" id="markdown-toc-設定内容">設定内容</a>    <ul>
+      <li><a href="#gradleの設定" id="markdown-toc-gradleの設定">Gradleの設定</a></li>
+      <li><a href="#applicationproperteisの設定" id="markdown-toc-applicationproperteisの設定">application.properteisの設定</a></li>
+      <li><a href="#intellij-ideaの設定" id="markdown-toc-intellij-ideaの設定">IntelliJ IDEAの設定</a>        <ul>
+          <li><a href="#自動ビルド設定" id="markdown-toc-自動ビルド設定">自動ビルド設定</a></li>
+          <li><a href="#レジストリ設定" id="markdown-toc-レジストリ設定">レジストリ設定</a></li>
+        </ul>
+      </li>
+      <li><a href="#springbootapplicationの起動" id="markdown-toc-springbootapplicationの起動">SpringBootApplicationの起動</a>        <ul>
+          <li><a href="#profileの指定をどうするのか" id="markdown-toc-profileの指定をどうするのか">Profileの指定をどうするのか</a></li>
+          <li><a href="#thymeleafのテンプレートキャッシュをoffにしたい" id="markdown-toc-thymeleafのテンプレートキャッシュをoffにしたい">ThymeleafのテンプレートキャッシュをOFFにしたい</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+<hr />
+
+<h2 id="設定内容">設定内容</h2>
+
+<h3 id="gradleの設定">Gradleの設定</h3>
+<p>build.gradleのdependenciesに以下を記載。</p>
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dependencies</span> <span class="o">{</span>
+  <span class="n">runtime</span><span class="o">(</span><span class="s1">'org.springframework.boot:spring-boot-devtools'</span><span class="o">)</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="applicationproperteisの設定">application.properteisの設定</h3>
+<p>application.properteisに以下を設定。（YAMLの場合は適宜読み替えて下さい。）</p>
+
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">spring.devtools.restart.enabled</span><span class="p">=</span><span class="s">true</span>
+<span class="py">spring.devtools.restart.exclude</span><span class="p">=</span><span class="s">META-INF/maven/**,META-INF/resources/**,resources/**,static/**,public/**,templates/**,**/*Test.class,**/*Tests.class,git.properties,META-INF/build-info.properties</span>
+<span class="py">spring.devtools.restart.log-condition-evaluation-delta</span><span class="p">=</span><span class="s">true</span>
+<span class="py">spring.devtools.restart.poll-interval</span><span class="p">=</span><span class="s">1s</span>
+<span class="py">spring.devtools.restart.quiet-period</span><span class="p">=</span><span class="s">400ms</span>
+
+</code></pre></div></div>
+
+<h3 id="intellij-ideaの設定">IntelliJ IDEAの設定</h3>
+<p>結局はここからが重要になります。</p>
+
+<h4 id="自動ビルド設定">自動ビルド設定</h4>
+<p>Preference &gt; Build,Execution,Deployment &gt; Compiler<br />
+この設定の「Build project automatically」にチェックを付与する。</p>
+
+<p><img src="http://localhost:4000/assets/resources/images/2018-09-01-springboot-devtools-withidea/2018-09-01-001.png" alt="idea" /></p>
+
+<h4 id="レジストリ設定">レジストリ設定</h4>
+<p>通常では、自動ビルド設定を行なっていても、既にアプリケーションが実行状態である場合には機能しません。<br />
+Devtoolsはクラスファイルやリソースの変更を検知して再起動してくれるものだと思いますので、この状態では意味がありません。<br />
+実行状態でも自動ビルドが走るように設定します。<br />
+<br />
+IntellJ IDEAを起動した状態で「Ctrl + Shift + A」を押します。（Cmd + Shift + A）<br />
+ここに対して「Registry」をタイプします。</p>
+
+<p><img src="http://localhost:4000/assets/resources/images/2018-09-01-springboot-devtools-withidea/2018-09-01-002.png" alt="idea" /></p>
+
+<p>Registryの設定にて、「compiler.automake.allow.when.app.running」のチェックをONにします。<br />
+この設定を行うことによって、アプリケーションが実行中であったとしても自動ビルドが走るようになります。</p>
+
+<p><img src="http://localhost:4000/assets/resources/images/2018-09-01-springboot-devtools-withidea/2018-09-01-003.png" alt="idea" /></p>
+
+<h3 id="springbootapplicationの起動">SpringBootApplicationの起動</h3>
+<p>通常、Gradleのタスクから「bootRun」を行なっていますが、<br />
+DevtoolsによるrestartをIntelliJ IDEAにおいて利用する場合は、Gradleタスクは利用できません。<br />
+理由としては、ビルドした際の出力パスの違いです。<br />
+Gradleでビルドした場合は、「$projectDir/build」ですが、IntellJ IDEAでは「projectDir/out」になります。<br />
+Gradleのタスクから「bootRun」を行うとDevtoolsの監視ディレクトリは「$projectDir/build」になるようです。<br />
+これに対して、SpringBootApplicationクラス（mainクラス）をIntellJ IDEAから直接実行した場合にはDevtoolsの監視ディレクトリが「project/out」となるようです。<br />
+従って、Devtoolsによるリソース監視＋再起動（restart）を行いたい場合はSpringBootApplicationクラスを直接実行するようにしましょう。\</p>
+
+<h4 id="profileの指定をどうするのか">Profileの指定をどうするのか</h4>
+<p>SpringBootApplicationクラスを直接実行する際に、SpringBootのProfileを指定したい場合は多々あるかと思います。<br />
+そう言った場合には、Run&amp;Configurationにて「–spring.profies.active」を直接指定します。<br />
+以下設定イメージになります。</p>
+
+<p><img src="http://localhost:4000/assets/resources/images/2018-09-01-springboot-devtools-withidea/2018-09-01-004.png" alt="idea" /></p>
+
+<h4 id="thymeleafのテンプレートキャッシュをoffにしたい">ThymeleafのテンプレートキャッシュをOFFにしたい</h4>
+<p>Thymeleafのキャッシュを「false」にしても、Devtools入れても動的に変更できずもどかしくなったのが調査のきっかけだったのですが、<br />
+結局はビルド時の出力ディレクトリの違いが原因でした。<br />
+きちんと確認をしているわけではありませんが、Devtoolsを導入すると勝手にcacheが「false」になるようです。<br />
+そうであったとしてもDevtoolsの参照スコープが「Runtime」なので問題ないでしょう。</p>
+:ET

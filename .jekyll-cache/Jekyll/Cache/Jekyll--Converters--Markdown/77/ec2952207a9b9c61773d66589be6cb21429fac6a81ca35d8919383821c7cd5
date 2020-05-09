@@ -1,0 +1,104 @@
+I"�
+<p>こんばんは、takashno（Employee Ver）です。<br />
+少しきちんとJekyllのブログの書き方を紹介したいと思います。</p>
+
+<!-- 目次 -->
+<hr />
+
+<ul id="markdown-toc">
+  <li><a href="#投稿の書き方" id="markdown-toc-投稿の書き方">投稿の書き方</a>    <ul>
+      <li><a href="#jekyllで利用するmarkdownのエンジン" id="markdown-toc-jekyllで利用するmarkdownのエンジン">Jekyllで利用するMarkdownのエンジン</a></li>
+      <li><a href="#下書きから公開まで" id="markdown-toc-下書きから公開まで">下書きから公開まで</a>        <ul>
+          <li><a href="#下書きのプレビュー方法" id="markdown-toc-下書きのプレビュー方法">下書きのプレビュー方法</a></li>
+          <li><a href="#公開する方法" id="markdown-toc-公開する方法">公開する方法</a></li>
+          <li><a href="#下書きから公開するまでの運用文化" id="markdown-toc-下書きから公開するまでの運用文化">下書きから公開するまでの運用？文化</a></li>
+        </ul>
+      </li>
+      <li><a href="#画像の埋め込み" id="markdown-toc-画像の埋め込み">画像の埋め込み</a></li>
+      <li><a href="#テンプレート" id="markdown-toc-テンプレート">テンプレート</a></li>
+    </ul>
+  </li>
+</ul>
+<hr />
+
+<h2 id="投稿の書き方">投稿の書き方</h2>
+<p>JekyllはMarkdown記法による記述を行えば、HTML変換するときに綺麗に出力してくれるので、<br />
+小さい労力で綺麗なページが書けます。このあたりはGitHubのREADME.mdなんかと同じですね。<br />
+<br />
+ですが、Markdownにも割と派生がありまして選択するMarkdonwのエンジンによって少し記法が変わっていたりもするようです。<br />
+またAsciiDoc等のドキュメントビルダーとも少し違うので覚えるのが少しだるいかもしれません。。。<br />
+この辺りは世界的に１つにまとまるととても嬉しいですが、そんなことはありえません。</p>
+
+<h3 id="jekyllで利用するmarkdownのエンジン">Jekyllで利用するMarkdownのエンジン</h3>
+<p>_config.ymlで定義を行います。
+例は以下の通り。</p>
+
+<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="na">markdown</span><span class="pi">:</span> <span class="s">kramdown</span></code></pre></figure>
+
+<p>このブログで採用しているMarkdown記法は「kramdown」というもので特に思い入れもなく使ってます。<br />
+詳細に関しては以下を参照してください。</p>
+
+<p>公式ページ<br />
+<a href="https://kramdown.gettalong.org/">https://kramdown.gettalong.org/</a><br />
+<br />
+クイックリファレンス（案外見辛い）<br />
+<a href="https://kramdown.gettalong.org/quickref.html">https://kramdown.gettalong.org/quickref.html</a>\</p>
+
+<h3 id="下書きから公開まで">下書きから公開まで</h3>
+<p>Jekyllの公式ページをみると書いてあるんですが、投稿の下書きと公開をきちんと管理できます。<br />
+Jekyllのディレクトリ構成は以下のようになっているのですが（公式ページリンクのみ）<br />
+<br />
+<a href="https://jekyllrb.com/docs/structure/">Directory structure</a><br />
+<br />
+プロジェクト直下に、「_posts」と「_drafts」というディレクトリがあります。<br />
+単純ではありますが、「_posts」が公開投稿となり、「_drafts」が下書きの投稿となります。<br />
+なのでまだ公開したくないが書き溜めて置きたいんだ！といった内容は「_drafts」に配置すれば良いわけです。</p>
+
+<h4 id="下書きのプレビュー方法">下書きのプレビュー方法</h4>
+<p>次にきになるのが当然ですが、下書きのプレビューです。<br />
+ローカルで簡単に起動して投稿の確認ができるJekyllですが、どうしたら下書きの確認ができるかを説明します。<br />
+<br />
+Jekyllを普通にローカルで起動するには以下のコマンドを実行します。<br />
+起動後に<a href="http://localhost:4000">localhost:4000</a>へアクセスしてみてください。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>jekyll s</code></pre></figure>
+
+<p>Jekyllを下書きモードでローカルで起動するには「–draft」オプションを追加して以下のコマンドを実行します。<br />
+起動後に<a href="http://localhost:4000">localhost:4000</a>へアクセスしてみてください。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>jekyll s <span class="nt">--draft</span></code></pre></figure>
+
+<p>こうすることで下書きディレクトリ配下に存在する投稿も全てローカルで確認することができます。</p>
+
+<h4 id="公開する方法">公開する方法</h4>
+<p>単純ですが、「_posts」ディレクトリへ移動するのみです。</p>
+
+<h4 id="下書きから公開するまでの運用文化">下書きから公開するまでの運用？文化</h4>
+<p>複数人でブログを運営する場合で承認が必要なようなお堅いブログであれば、<br />
+GitHubのブランチ運用を行なってプルリクエストで運用すべきでしょうから「_drafts」ディレクトリというよりは<br />
+ブランチを切って「_posts」ディレクトリのみを更新対象とする方がよいでしょう。<br />
+<br />
+このブログは適当でいいのでmasterブランチをそのまま直接いじってます。。。<br />
+masterを直接いじるのであれば割と「_drafts」ディレクトリは有効利用できるのではないでしょうか。</p>
+
+<h3 id="画像の埋め込み">画像の埋め込み</h3>
+<p>画像の埋め込み方法はいくつかありますが、決めの問題だと思いますので自分なりに考えた方法を説明します。<br />
+公式ページには、「assets」とか「downloads」とか勝手に使えばいいんじゃない？という感じでしたが、<br />
+以下のディレクトリを使おうと思います。</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{projectDir}/assets/resoureces/images/{投稿ページの拡張子を抜いたもの}/{任意のファイル}
+</code></pre></div></div>
+<p>参照するときには、以下のように記載します。</p>
+
+<figure class="highlight"><pre><code class="language-md" data-lang="md"><span class="p">![</span><span class="nv">alt属性</span><span class="p">](</span><span class="sx">{{</span> site.url }}/assets/resoureces/images/{投稿ページの拡張子を抜いたもの}/{ファイル名}.jpg){:height="(縦)px" width="(横)px"}</code></pre></figure>
+
+<p>実際に使ってみるとこんな感じです。<br />
+<br />
+<img src="http://localhost:4000/assets/resources/images/2017-08-23-howto-writepage/takashno.jpg" alt="takashno" height="200px" width="160px" /></p>
+
+<h3 id="テンプレート">テンプレート</h3>
+<p>下書きページに、テンプレートを入れておいてみんなで育てて使いやすくしていくのがいいかもしれません。<br />
+そうすることで誰もが手っ取り早く馴染むことができて更新頻度も上がるかもしれません。<br />
+<br />
+<br />
+以上でした。</p>
+:ET

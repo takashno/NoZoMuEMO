@@ -1,0 +1,241 @@
+I"�2<h1 id="serverless学習">Serverless学習</h1>
+
+<p>こんばんは、takashno（Private Ver） です。<br />
+今日は、Serverless Framework のチュートリアルをやってみました.</p>
+
+<!-- 目次 -->
+<hr />
+
+<ul id="markdown-toc">
+  <li><a href="#serverless学習" id="markdown-toc-serverless学習">Serverless学習</a>    <ul>
+      <li><a href="#概要" id="markdown-toc-概要">概要</a></li>
+      <li><a href="#インストール" id="markdown-toc-インストール">インストール</a>        <ul>
+          <li><a href="#node" id="markdown-toc-node">Node</a></li>
+          <li><a href="#serverless-framework" id="markdown-toc-serverless-framework">Serverless Framework</a></li>
+        </ul>
+      </li>
+      <li><a href="#プロジェクト作成" id="markdown-toc-プロジェクト作成">プロジェクト作成</a></li>
+      <li><a href="#ファイル編集" id="markdown-toc-ファイル編集">ファイル編集</a></li>
+      <li><a href="#iamの作成" id="markdown-toc-iamの作成">IAMの作成</a></li>
+      <li><a href="#デプロイ" id="markdown-toc-デプロイ">デプロイ</a></li>
+      <li><a href="#デプロイ結果" id="markdown-toc-デプロイ結果">デプロイ結果</a>        <ul>
+          <li><a href="#lambda" id="markdown-toc-lambda">Lambda</a></li>
+        </ul>
+      </li>
+      <li><a href="#実行" id="markdown-toc-実行">実行</a></li>
+      <li><a href="#ログ確認" id="markdown-toc-ログ確認">ログ確認</a></li>
+      <li><a href="#削除" id="markdown-toc-削除">削除</a></li>
+      <li><a href="#まとめ" id="markdown-toc-まとめ">まとめ</a></li>
+    </ul>
+  </li>
+</ul>
+<hr />
+
+<h2 id="概要">概要</h2>
+<p>ServerlessFrameworkを学んでみる.<br />
+開発する言語はは<code class="highlighter-rouge">Node.js</code>.<br />
+PaaSには<code class="highlighter-rouge">AWS</code>を選択してみる.</p>
+
+<h2 id="インストール">インストール</h2>
+
+<h3 id="node">Node</h3>
+<p>Node.jsはもともとインストールしていたため割愛</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>node <span class="nt">-v</span>
+v11.4.0
+</code></pre></div></div>
+
+<h3 id="serverless-framework">Serverless Framework</h3>
+<p>npmでServerless Frameworkをインストール.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>npm <span class="nb">install</span> <span class="nt">-g</span> serverless
+<span class="nv">$ </span>serverless <span class="nt">-v</span>
+1.35.1
+<span class="nv">$ </span>sls <span class="nt">-v</span>
+1.35.1
+</code></pre></div></div>
+
+<h2 id="プロジェクト作成">プロジェクト作成</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>sls create <span class="nt">--template</span> aws-nodejs <span class="nt">--path</span> <span class="o">{</span>projectName<span class="o">}</span>
+Serverless: Generating boilerplate...
+Serverless: Generating boilerplate <span class="k">in</span> <span class="s2">"/Users/takashimanozomu/work/30_pgworkspaces/vscode/learning-serverless/out"</span>
+ _______                             __
+|   _   .-----.----.--.--.-----.----|  .-----.-----.-----.
+|   |___|  <span class="nt">-__</span>|   _|  |  |  <span class="nt">-__</span>|   _|  |  <span class="nt">-__</span>|__ <span class="nt">--</span>|__ <span class="nt">--</span>|
+|____   |_____|__|  <span class="se">\_</span>__/|_____|__| |__|_____|_____|_____|
+|   |   |             The Serverless Application Framework
+|       |                           serverless.com, v1.35.1
+ <span class="nt">-------</span><span class="s1">'
+
+Serverless: Successfully generated boilerplate for template: "aws-nodejs"
+</span></code></pre></div></div>
+
+<p>ディレクトリ構成としては以下のようなファイル群が作成された.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>projectRoot
+  |
+  |--.gitignore
+  |--handler.js
+  `--serverless.yml
+</code></pre></div></div>
+
+<h2 id="ファイル編集">ファイル編集</h2>
+
+<p>serverless.ymlを一部書き換える必要があるそうだ.</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">provider</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">aws</span>
+  <span class="na">runtime</span><span class="pi">:</span> <span class="s">nodejs8.10</span>
+  <span class="na">region</span><span class="pi">:</span> <span class="s">ap-northeast-1  # この行を追加</span>
+</code></pre></div></div>
+
+<h2 id="iamの作成">IAMの作成</h2>
+
+<p>ServerlessFrameworkで利用するIAMをAWSのマネジメントコンソールから作成した.<br />
+アクセスキーおよびシークレットキーを取得.<br />
+ポリシーは <code class="highlighter-rouge">AdministratorAccess</code> を与えた.</p>
+
+<h2 id="デプロイ">デプロイ</h2>
+
+<p>デプロイの前に、作成したIAMの情報を環境変数で定義.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">export </span><span class="nv">AWS_ACCESS_KEY_ID</span><span class="o">={</span>アクセスキー<span class="o">}</span>
+<span class="nv">$ </span><span class="nb">export </span><span class="nv">AWS_SECRET_ACCESS_KEY</span><span class="o">={</span>シークレットキー<span class="o">}</span>
+</code></pre></div></div>
+
+<p>この他にも方法はあるようだ.<br />
+<a href="https://serverless.com/framework/docs/providers/aws/guide/credentials/">公式ドキュメント</a>に書いてあった.</p>
+
+<p>デプロイを実施する.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>serverless deploy <span class="nt">-v</span>
+Serverless: Packaging service...
+Serverless: Excluding development dependencies...
+Serverless: Creating Stack...
+Serverless: Checking Stack create progress...
+CloudFormation - CREATE_IN_PROGRESS - AWS::CloudFormation::Stack - out-dev
+CloudFormation - CREATE_IN_PROGRESS - AWS::S3::Bucket - ServerlessDeploymentBucket
+CloudFormation - CREATE_IN_PROGRESS - AWS::S3::Bucket - ServerlessDeploymentBucket
+CloudFormation - CREATE_COMPLETE - AWS::S3::Bucket - ServerlessDeploymentBucket
+CloudFormation - CREATE_COMPLETE - AWS::CloudFormation::Stack - out-dev
+Serverless: Stack create finished...
+Serverless: Uploading CloudFormation file to S3...
+Serverless: Uploading artifacts...
+Serverless: Uploading service .zip file to S3 <span class="o">(</span>1.27 KB<span class="o">)</span>...
+Serverless: Validating template...
+Serverless: Updating Stack...
+Serverless: Checking Stack update progress...
+CloudFormation - UPDATE_IN_PROGRESS - AWS::CloudFormation::Stack - out-dev
+CloudFormation - CREATE_IN_PROGRESS - AWS::Logs::LogGroup - HelloLogGroup
+CloudFormation - CREATE_IN_PROGRESS - AWS::IAM::Role - IamRoleLambdaExecution
+CloudFormation - CREATE_IN_PROGRESS - AWS::Logs::LogGroup - HelloLogGroup
+CloudFormation - CREATE_COMPLETE - AWS::Logs::LogGroup - HelloLogGroup
+CloudFormation - CREATE_IN_PROGRESS - AWS::IAM::Role - IamRoleLambdaExecution
+CloudFormation - CREATE_COMPLETE - AWS::IAM::Role - IamRoleLambdaExecution
+CloudFormation - CREATE_IN_PROGRESS - AWS::Lambda::Function - HelloLambdaFunction
+CloudFormation - CREATE_IN_PROGRESS - AWS::Lambda::Function - HelloLambdaFunction
+CloudFormation - CREATE_COMPLETE - AWS::Lambda::Function - HelloLambdaFunction
+CloudFormation - CREATE_IN_PROGRESS - AWS::Lambda::Version - HelloLambdaVersionB7WY0OSKPIHFjeHZtSsqgSXLgHFcfJalbqn07jxo8
+CloudFormation - CREATE_IN_PROGRESS - AWS::Lambda::Version - HelloLambdaVersionB7WY0OSKPIHFjeHZtSsqgSXLgHFcfJalbqn07jxo8
+CloudFormation - CREATE_COMPLETE - AWS::Lambda::Version - HelloLambdaVersionB7WY0OSKPIHFjeHZtSsqgSXLgHFcfJalbqn07jxo8
+CloudFormation - UPDATE_COMPLETE_CLEANUP_IN_PROGRESS - AWS::CloudFormation::Stack - out-dev
+CloudFormation - UPDATE_COMPLETE - AWS::CloudFormation::Stack - out-dev
+Serverless: Stack update finished...
+Service Information
+service: out
+stage: dev
+region: ap-northeast-1
+stack: out-dev
+api keys:
+  None
+endpoints:
+  None
+functions:
+  hello: out-dev-hello
+layers:
+  None
+
+Stack Outputs
+HelloLambdaFunctionQualifiedArn: arn:aws:lambda:ap-northeast-1:<span class="k">************</span>:function:out-dev-hello:1
+ServerlessDeploymentBucketName: out-dev-serverlessdeploymentbucket-<span class="k">************</span>
+</code></pre></div></div>
+
+<p>よくわからないが、デプロイは完了したような雰囲気だ.<br />
+雰囲気、LamndaとS3に何かしたのだろうというのは標準出力からわかる.<br />
+とりあえず、マネジメントコンソールで何が起きたのかは後ほど確認してみる.</p>
+
+<p>チュートリアルに存在する、以下のコマンドは簡単に更新するためのもの.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>serverless deploy <span class="k">function</span> <span class="nt">-f</span> hello
+Serverless: Packaging <span class="k">function</span>: hello...
+Serverless: Excluding development dependencies...
+Serverless: Uploading <span class="k">function</span>: hello <span class="o">(</span>476.58 KB<span class="o">)</span>...
+Serverless: Successfully deployed <span class="k">function</span>: hello
+Serverless: Successfully updated <span class="k">function</span>: hello
+</code></pre></div></div>
+
+<h2 id="デプロイ結果">デプロイ結果</h2>
+
+<h3 id="lambda">Lambda</h3>
+
+<p>Lambda Functionが作成されていた.<br />
+内容は流石に、<code class="highlighter-rouge">handler.js</code> のようだ.</p>
+
+<p><img src="http://localhost:4000/assets/resources/images/2019-01-06-serverless-framework-01/lambda001.png" alt="Lambda" /></p>
+
+<p>ただし、トリガーが定義されていない.<br />
+<code class="highlighter-rouge">API Gateway</code> 等の設定を行っていないからだろうが、どうやって実行するのか.</p>
+
+<p><img src="http://localhost:4000/assets/resources/images/2019-01-06-serverless-framework-01/lambda002.png" alt="Lambda" /></p>
+
+<p>この他、S3にバケットが新たに作成されており、CloudFormationも作成されていた.</p>
+
+<h2 id="実行">実行</h2>
+
+<p>実行もServerless Frameworkから行えるようだ.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ serverless invoke -f hello -l
+{
+    "statusCode": 200,
+    "body": "{\"message\":\"Go Serverless v1.0! Your function executed successfully!\",\"input\":{}}"
+}
+--------------------------------------------------------------------
+START RequestId: d061003a-11c8-11e9-bc43-c9296002e575 Version: $LATEST
+END RequestId: d061003a-11c8-11e9-bc43-c9296002e575
+REPORT RequestId: d061003a-11c8-11e9-bc43-c9296002e575  Duration: 5.34 ms       Billed Duration: 100 ms         Memory Size: 1024 MB    Max Memory Used: 45 MB
+
+</code></pre></div></div>
+
+<p>実行してみたところ正常に返却されているようだ.<br />
+ただし、AWSのマネジメントコンソールからみても１度実行されてる以外よくわからない.</p>
+
+<p><img src="http://localhost:4000/assets/resources/images/2019-01-06-serverless-framework-01/lambda003.png" alt="Lambda" /></p>
+
+<h2 id="ログ確認">ログ確認</h2>
+
+<p>ログ確認用のコマンドがあるようなので、試してみる.<br />
+よくわからんが、めちゃくちゃコマンドが返ってくるまでに時間がかかりすぎるので諦めた・・・</p>
+
+<h2 id="削除">削除</h2>
+
+<p>デプロイしたものを削除するコマンドがあるようだ.<br />
+無料枠で頑張る自分は忘れず削除・・・</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ serverless remove
+Serverless: Getting all objects in S3 bucket...
+Serverless: Removing objects in S3 bucket...
+Serverless: Removing Stack...
+Serverless: Checking Stack removal progress...
+....
+Serverless: Stack removal finished...
+</code></pre></div></div>
+
+<p>AWSのマネジメントコンソールからも確認を行なったが、<br />
+作成されたものが綺麗さっぱり掃除されていた.</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>Serverless Frameworkのチュートリアル的なものをなぞってみたが、<br />
+ハマりどころがなくスムーズにことが進むので驚いた.<br />
+Serverless Architectureはこれから無視できない技術領域になるため、<br />
+もう少ししっかりとしたキャッチアップを進めていきたいと思う.</p>
+:ET

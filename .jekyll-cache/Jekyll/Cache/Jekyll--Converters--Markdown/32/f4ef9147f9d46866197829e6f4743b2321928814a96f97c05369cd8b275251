@@ -1,0 +1,114 @@
+I"W(<p><a href="https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf_ja.html">Thymeleaf</a>とは、JavaのテンプレートエンジンでXML/XHTML/HTML5からアプリケーションのデータを作成できるものですが、<br />
+主な用途は画面（HTML）のテンプレートエンジンでしょう。<br />
+<a href="https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf_ja.html">Thymeleaf</a>は公式の日本語ドキュメントが非常に充実しているため、あえて説明することもあまりありません。<br />
+このブログでは紹介や自分自身の考え方のメモとして記事にすることにしました。</p>
+
+<!-- 目次 -->
+<hr />
+
+<ul id="markdown-toc">
+  <li><a href="#デザインとロジックの共存が可能なテンプレート" id="markdown-toc-デザインとロジックの共存が可能なテンプレート">デザインとロジックの共存が可能なテンプレート</a></li>
+  <li><a href="#システムインテグレータの内部としても利用する価値がある" id="markdown-toc-システムインテグレータの内部としても利用する価値がある">システムインテグレータの内部としても利用する価値がある</a></li>
+  <li><a href="#今回のまとめ" id="markdown-toc-今回のまとめ">今回のまとめ</a></li>
+  <li><a href="#参考" id="markdown-toc-参考">参考</a></li>
+</ul>
+<hr />
+
+<h3 id="デザインとロジックの共存が可能なテンプレート">デザインとロジックの共存が可能なテンプレート</h3>
+<p><a href="https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf_ja.html">Thymeleaf</a>の強みはHTMLとの相性がとても良いことです。<br />
+また、デザイナーさんとの共同作業に強いことです。<br />
+JSPなどは、デザイナーさんがモックアップを作成してそれをエンジニアがJSPへ移行する等の作業が入りますが、<br />
+<a href="https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf_ja.html">Thymeleaf</a>を利用するとその手間が少しなくなります。<br />
+また、画面に対する仕様変更が入った際に一番効果的ですがエンジニアが作成したThymeleafのテンプレートを<br />
+そのままデザイナーさんへ引き継ぐことが可能です。<br />
+どういうことかというと、<a href="https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf_ja.html">Thymeleaf</a>のテンプレートを見ながら説明します。</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;table&gt;</span>
+  <span class="nt">&lt;tr&gt;</span>
+    <span class="nt">&lt;th&gt;</span>NAME<span class="nt">&lt;/th&gt;</span>
+    <span class="nt">&lt;th&gt;</span>PRICE<span class="nt">&lt;/th&gt;</span>
+    <span class="nt">&lt;th&gt;</span>IN STOCK<span class="nt">&lt;/th&gt;</span>
+    <span class="nt">&lt;th&gt;</span>COMMENTS<span class="nt">&lt;/th&gt;</span>
+  <span class="nt">&lt;/tr&gt;</span>
+  <span class="nt">&lt;tr</span> <span class="na">th:each=</span><span class="s">"prod : ${prods}"</span> <span class="na">th:class=</span><span class="s">"${prodStat.odd}? 'odd'"</span><span class="nt">&gt;</span> <span class="c">&lt;!-- (1) --&gt;</span>
+    <span class="nt">&lt;td</span> <span class="na">th:text=</span><span class="s">"${prod.name}"</span><span class="nt">&gt;</span>Onions<span class="nt">&lt;/td&gt;</span> <span class="c">&lt;!-- (2) --&gt;</span>
+    <span class="nt">&lt;td</span> <span class="na">th:text=</span><span class="s">"${prod.price}"</span><span class="nt">&gt;</span>2.41<span class="nt">&lt;/td&gt;</span>
+    <span class="nt">&lt;td</span> <span class="na">th:text=</span><span class="s">"${prod.inStock}? #{true} : #{false}"</span><span class="nt">&gt;</span>yes<span class="nt">&lt;/td&gt;</span>
+    <span class="nt">&lt;td&gt;</span>
+      <span class="nt">&lt;span</span> <span class="na">th:text=</span><span class="s">"${#lists.size(prod.comments)}"</span><span class="nt">&gt;</span>2<span class="nt">&lt;/span&gt;</span> comment/s
+      <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"comments.html"</span> 
+         <span class="na">th:href=</span><span class="s">"@{/product/comments(prodId=${prod.id})}"</span> 
+         <span class="na">th:unless=</span><span class="s">"${#lists.isEmpty(prod.comments)}"</span><span class="nt">&gt;</span>view<span class="nt">&lt;/a&gt;</span>
+    <span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;/tr&gt;</span>
+  <span class="nt">&lt;tr</span> <span class="na">class=</span><span class="s">"odd"</span> <span class="na">th:remove=</span><span class="s">"all"</span><span class="nt">&gt;</span> <span class="c">&lt;!-- (3) --&gt;</span>
+    <span class="nt">&lt;td&gt;</span>Blue Lettuce<span class="nt">&lt;/td&gt;</span>
+    <span class="nt">&lt;td&gt;</span>9.55<span class="nt">&lt;/td&gt;</span>
+    <span class="nt">&lt;td&gt;</span>no<span class="nt">&lt;/td&gt;</span>
+    <span class="nt">&lt;td&gt;</span>
+      <span class="nt">&lt;span&gt;</span>0<span class="nt">&lt;/span&gt;</span> comment/s
+    <span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;/tr&gt;</span>
+  <span class="nt">&lt;tr</span> <span class="na">th:remove=</span><span class="s">"all"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;td&gt;</span>Mild Cinnamon<span class="nt">&lt;/td&gt;</span>
+    <span class="nt">&lt;td&gt;</span>1.99<span class="nt">&lt;/td&gt;</span>
+    <span class="nt">&lt;td&gt;</span>yes<span class="nt">&lt;/td&gt;</span>
+    <span class="nt">&lt;td&gt;</span>
+      <span class="nt">&lt;span&gt;</span>3<span class="nt">&lt;/span&gt;</span> comment/s
+      <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"comments.html"</span><span class="nt">&gt;</span>view<span class="nt">&lt;/a&gt;</span>
+    <span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;/tr&gt;</span>
+<span class="nt">&lt;/table&gt;</span>
+
+</code></pre></div></div>
+
+<ol>
+  <li>
+    <p><a href="https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf_ja.html">Thymeleaf</a>はテンプレートエンジンとしての処理指示をHTMLの属性で記述することが可能です。<br />
+これは単純なHTMLとしてブラウザ表示した場合には無視されます。<br />
+thというネームスペースがThymeleaf用の属性を定義するために存在します。<br />
+これは別途htmlエレメントに定義する必要があります。</p>
+  </li>
+  <li>
+    <p>th:textはいわゆるDOMのテキストノードを置換するための記述です。<br />
+ブラウザで見たときには「Onions」というHTMLに記述されている値が採用されますが、<br />
+<a href="https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf_ja.html">Thymeleaf</a>のテンプレートエンジンを利用してコンバートした後のHTMLとしては<br />
+<code class="highlighter-rouge">th:text="${prod.name}"</code>として動的に解決した値が採用されます。</p>
+  </li>
+  <li>
+    <p>モックアップの時点ではTableタグの行（trタグ）として複数のものが存在していないと<br />
+お客様にイメージをきちんと把握してもらえないためダミーの行を作成するでしょう。<br />
+ですがテンプレートとしては不要です。<br />
+JSP等と一緒で１つの行に対してfor文のような繰り返し処理を行って画面を作成するからです。<br />
+<a href="https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf_ja.html">Thymeleaf</a>ではこれらの<code class="highlighter-rouge">モックアップには必要だがテンプレートエンジンには不要</code>といったHTMLの要素を消し込む機能があります。
+それが<code class="highlighter-rouge">th:remove</code>です。</p>
+  </li>
+</ol>
+
+<h3 id="システムインテグレータの内部としても利用する価値がある">システムインテグレータの内部としても利用する価値がある</h3>
+<p>前述では、あくまでもデザイナーさんとの共同開発を主な目線として記載していますが、<br />
+システムインテグレータ＝エンジニアのみで利用する場合も有効であると自分は考えています。<br />
+<br />
+基本的にウォーターフォール開発をする場合には、工程が要件定義→基本設計→詳細設計のように進んでいくことが多いでしょう。<br />
+画面モックアップが活躍するのは、要件定義〜基本設計だと思います。<br />
+このモックアップをたとえエンジニアが作成していても後々の製造工程等において<br />
+そのまま活用するために<a href="https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf_ja.html">Thymeleaf</a>を利用するのはアリだと思います。<br />
+<br />
+仕様変更がないシステム開発は効率的で理想的ですが、現実的に多くはないでしょう。（あるのかな・・・）<br />
+その際に仕様変更が画面デザインも含めて変わるような内容の場合はお客様に確認する術として<br />
+視覚に訴えかけることが必要となるでしょう。<br />
+<br />
+そのような時に、<a href="https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf_ja.html">Thymeleaf</a>であれば別途モックアップの最新化やメンテナンス作業を別途行うことなく<br />
+モックアップ修正＝製造工程修正となるため効率が良いです。<br />
+（このような利用をするためには、元からそういうつもりでテンプレートを組まなければなりませんので少し注意）</p>
+
+<h3 id="今回のまとめ">今回のまとめ</h3>
+<ul>
+  <li><a href="https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf_ja.html">Thymeleaf</a>の紹介</li>
+  <li>ちょっとしたテンプレートの紹介</li>
+  <li>実際の開発での利用についての自論</li>
+</ul>
+
+<h3 id="参考">参考</h3>
+<p><a href="https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf_ja.html">Thymeleaf公式ドキュメント</a></p>
+:ET
