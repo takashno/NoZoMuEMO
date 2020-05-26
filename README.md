@@ -1,2 +1,0 @@
-# NoZoMuEMO
-NoZoMuEMO
