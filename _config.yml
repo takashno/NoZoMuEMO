@@ -1,51 +1,37 @@
-# visit https://github.com/mojombo/jekyll/wiki/Configuration for more settings
-
-paginate: 10 # pagination based on number of posts
-paginate_path: "page:num"
-exclude: ["README.md"] # files to exclude
-highlighter: rouge
-markdown: kramdown
-disqus: nozomuemo
-google_analytics: UA-63047134-5
 title: NoZoMuEMO
+description: > # this means to ignore newlines until "baseurl:"
+  Write an awesome description for your new site here. You can edit this
+  line in _config.yml. It will appear in your document head meta (for
+  Google search results) and in your feed.xml site description.
+permalink: ':title/'
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://blog.t-zomu.com" # the base hostname & protocol for your site, e.g. http://example.com
+site-twitter: #if your site has a twitter account, enter it here
 
-defaults:
-  -
-    scope:
-      path: "" # empty string for all files
-    values:
-      title: NoZoMuEMO
+# Author Settings
+author: takashno # add your name
+author-img: takashno.jpg # add your photo
+about-author: アクアリウムに目覚めるSIer系エンジニア.嫌いなことばは人員手配です. # add description
+social-twitter: n_zomu # add your Twitter handle
+social-facebook: # add your Facebook handle
+social-github: takashno # add your Github handle
+social-linkedin: # add your Linkedin handle
+social-email: # add your Email address
 
-description: takashno memo and blog
-author:
-  name: NoZoMuEMO
-  email:
-  github: takashno
-  twitter: n_zomu
-  pinterest:
-  linkedin:
-  bio: NoZoMuEMO
-  email_md5:
+# Disqus
+discus-identifier: nozomuemo # add your discus identifier
 
-rss_path: feed.xml
-categories_path: categories.html
-tags_path: tags.html
-members_path: members.html
+# Tracker
+analytics: UA-63047134-5 # Google Analytics
 
-# set it as url of an image
-# sidebar_background_image: https://www.dropbox.com/s/g9h23zrycedxtk5/sky.png?raw=1
-
-BASE_PATH:
-
-gems:
+# Build Settings
+markdown: kramdown
+plugins:
+  - jekyll-sitemap
   - jekyll-paginate
-  - jekyll-asciidoc
+  - jemoji
 
-kramdown:
-  auto_ids:       true
-  entity_output:  as_char
-  toc_levels:     1..6
-  smart_quotes:   lsquo,rsquo,ldquo,rdquo
-  input:          GFM
-  hard_wrap:      false
-  footnote_nr:    1
+paginate: 8
+paginate_path: "/page/:num"
+
+exclude: ["node_modules", "gulpfile.js", "package.json", "yarn.lock"]

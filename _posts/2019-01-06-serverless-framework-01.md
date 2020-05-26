@@ -6,6 +6,7 @@ tags: [Serverless, Node.js]
 author: takashno
 fullview: false
 comments: true
+img:  # Add image post (optional)
 ---
 
 # Serverless学習

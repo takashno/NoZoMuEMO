@@ -6,6 +6,7 @@ tags: [SpringBoot,Devtools,Thymeleaf]
 author: takashno
 fullview: false
 comments: true
+img:  # Add image post (optional)
 ---
 
 SpringBootのDevtoolsを利用していい感じで開発効率上げたい！と考えていますが、\\

@@ -6,6 +6,7 @@ tags: [Spring,SpringBoot,Thymeleaf]
 author: takashno
 fullview: false
 comments: true
+img:  # Add image post (optional)
 ---
 
 [Thymeleaf](https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf_ja.html)とは、JavaのテンプレートエンジンでXML/XHTML/HTML5からアプリケーションのデータを作成できるものですが、\\

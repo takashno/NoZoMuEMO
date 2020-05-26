@@ -6,6 +6,8 @@ tags: [SpringMVC,REST-API]
 author: takashno
 fullview: false
 comments: true
+img:  # Add image post (optional)
+fig-caption: # Add figcaption (optional)
 ---
 
 {% assign author = site.data.people[page.author] %}

@@ -6,6 +6,7 @@ tags: [blog,jekyll]
 author: alp-takashno
 fullview: false
 comments: true
+img:  # Add image post (optional)
 ---
 {% assign author = site.data.people[page.author] %}
 こんばんは、{{ author.name }}です。\\

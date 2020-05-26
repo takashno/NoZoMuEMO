@@ -6,6 +6,8 @@ tags: [blog,github-page]
 author: alp-takashno
 fullview: false
 comments: true
+img:  # Add image post (optional)
+fig-caption: # Add figcaption (optional)
 ---
 
 {% assign author = site.data.people[page.author] %}

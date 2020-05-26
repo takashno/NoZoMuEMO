@@ -6,6 +6,7 @@ tags: [blog,戯言]
 author: takashno
 fullview: false
 comments: true
+img:  # Add image post (optional)
 ---
 
 {% assign author = site.data.people[page.author] %}
